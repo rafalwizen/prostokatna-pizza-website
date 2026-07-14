@@ -61,8 +61,8 @@ export const sameAs = [business.mapsUrl, ...delivery.map((d) => d.url)];
 // omitted until the owner supplies a rating + review count.
 export function buildJsonLd(lang: Lang) {
   const inLanguage = lang === "pl" ? "pl-PL" : "en-US";
-  const pageSlug = lang === "pl" ? "" : "en";
-  const pageUrl = lang === "pl" ? SITE_URL : `${SITE_URL}/en`;
+  const pageSlug = lang === "pl" ? "" : "en/";
+  const pageUrl = lang === "pl" ? `${SITE_URL}/` : `${SITE_URL}/en/`;
   return {
     "@context": "https://schema.org",
     "@graph": [

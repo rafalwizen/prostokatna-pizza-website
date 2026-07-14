@@ -8,9 +8,10 @@ export const defaultLang = "pl";
 export const languages = ["pl", "en"] as const;
 export type Lang = (typeof languages)[number];
 
-// Root-relative path for a language: "/" for PL (default), "/en" for EN.
+// Root-relative path for a language. Trailing slashes match Astro's directory
+// build format and the sitemap output, keeping canonical/hreflang consistent.
 export function localizedPath(lang: Lang): string {
-  return lang === defaultLang ? "/" : `/${lang}`;
+  return lang === defaultLang ? "/" : `/${lang}/`;
 }
 
 // Absolute URL for a language (used by canonical / hreflang / OG).
