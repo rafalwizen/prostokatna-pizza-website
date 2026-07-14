@@ -1,0 +1,20 @@
+# build output
+dist/
+
+# generated types + cache
+.astro/
+
+# dependencies
+node_modules/
+
+# env / os
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+
+# editor
+.idea/
+.vscode/*
+!.vscode/extensions.json
