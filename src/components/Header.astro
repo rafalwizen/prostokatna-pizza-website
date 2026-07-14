@@ -1,0 +1,87 @@
+---
+import type { Lang } from "@/i18n/config";
+import { localizedPath } from "@/i18n/config";
+import { t } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<header
+  class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-sm border-b border-[#ff8d2f]/20"
+>
+  <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center space-x-8">
+      <picture>
+        <source
+          type="image/avif"
+          srcset="/logo-round-320.avif 2x, /logo-round-160.avif 1x"
+        />
+        <source
+          type="image/webp"
+          srcset="/logo-round-320.webp 2x, /logo-round-160.webp 1x"
+        />
+        <img
+          src="/logo-round-160.webp"
+          alt="ProstoKątna Logo"
+          width="80"
+          height="80"
+          fetchpriority="high"
+          class="h-20 w-20 rounded-full"
+        />
+      </picture>
+
+      <div class="hidden md:flex space-x-6">
+        <a
+          href="#contact"
+          class="text-xl text-white hover:text-[#ff8d2f] font-bold font-space-mono-bold transition-colors duration-200"
+        >
+          {t(lang, "navContact")}
+        </a>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <!-- PL/EN toggle. The active language is a non-link <span> (no self-link);
+           the other is a plain <a> to that language's route. -->
+      <div class="flex bg-gray-800 rounded-none p-1">
+        {
+          lang === "pl" ? (
+            <span
+              aria-current="true"
+              class="px-3 py-1 rounded text-base font-medium bg-[#ff8d2f] text-white"
+            >
+              PL
+            </span>
+          ) : (
+            <a
+              href={localizedPath("pl")}
+              class="px-3 py-1 rounded text-base font-medium text-gray-300 hover:text-white transition-colors duration-200"
+            >
+              PL
+            </a>
+          )
+        }
+        {
+          lang === "en" ? (
+            <span
+              aria-current="true"
+              class="px-3 py-1 rounded text-base font-medium bg-[#ff8d2f] text-white"
+            >
+              EN
+            </span>
+          ) : (
+            <a
+              href={localizedPath("en")}
+              class="px-3 py-1 rounded text-base font-medium text-gray-300 hover:text-white transition-colors duration-200"
+            >
+              EN
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </nav>
+</header>
