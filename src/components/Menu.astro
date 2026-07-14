@@ -1,0 +1,103 @@
+---
+import type { Lang } from "@/i18n/config";
+import { t } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// The "menu" is two photos of the printed menu. menu1 uses object-contain
+// (letterboxed on black), menu2 uses object-cover.
+const items = [
+  { src: "/menu1.webp", alt: t(lang, "menuImage1Alt"), fit: "object-contain bg-black" },
+  { src: "/menu2.webp", alt: t(lang, "menuImage2Alt"), fit: "object-cover" },
+];
+---
+
+<section id="menu" class="py-20 bg-black">
+  <div class="container mx-auto px-4">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+      {
+        items.map((it) => (
+          <button
+            type="button"
+            data-lightbox-trigger
+            data-full={it.src}
+            data-alt={it.alt}
+            aria-label={`${t(lang, "openImage")} ${it.alt}`}
+            class="relative block w-full aspect-[7/10] rounded-none overflow-hidden shadow-2xl cursor-pointer"
+          >
+            <img
+              src={it.src}
+              alt={it.alt}
+              loading="lazy"
+              class:list={["w-full h-full rounded-none", it.fit]}
+            />
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Lightbox modal (always in the DOM, hidden by default) -->
+  <div
+    id="lightbox"
+    class="hidden fixed inset-0 bg-black/90 items-center justify-center z-50 cursor-pointer"
+    role="dialog"
+    aria-modal="true"
+    data-lightbox
+  >
+    <img id="lightbox-img" alt="" class="max-w-full max-h-full object-contain" />
+    <button
+      type="button"
+      data-lightbox-close
+      aria-label={t(lang, "closeImage")}
+      class="absolute top-4 right-4 text-white text-3xl font-bold focus:outline-none"
+    >
+      &times;
+    </button>
+  </div>
+</section>
+
+<script>
+  const triggers = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-lightbox-trigger]"),
+  );
+  const modal = document.getElementById("lightbox");
+  const modalImg = document.getElementById("lightbox-img");
+  const closeBtn = document.querySelector<HTMLElement>("[data-lightbox-close]");
+
+  const open = (src: string, alt: string) => {
+    if (!modal || !modalImg) return;
+    modalImg.setAttribute("src", src);
+    modalImg.setAttribute("alt", alt);
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+  };
+  const close = () => {
+    if (!modal || !modalImg) return;
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    modalImg.setAttribute("src", "");
+    modalImg.setAttribute("alt", "");
+    document.body.style.overflow = "";
+  };
+
+  triggers.forEach((el) =>
+    el.addEventListener("click", () =>
+      open(el.dataset.full ?? "", el.dataset.alt ?? ""),
+    ),
+  );
+  closeBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    close();
+  });
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
+</script>

@@ -1,0 +1,91 @@
+---
+import type { Lang } from "@/i18n/config";
+import { t } from "@/i18n/ui";
+import { mapsEmbedUrl, mapsOpenUrl } from "@/data/business";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const iframeTitle =
+  lang === "pl"
+    ? "Lokalizacja restauracji ProstoKątna"
+    : "Location of ProstoKątna restaurant";
+---
+
+<section id="contact" class="py-20 bg-black">
+  <div class="container mx-auto px-4">
+    <h2 class="text-5xl md:text-6xl font-bold font-space-mono-bold text-center text-[#ff8d2f] mb-16">
+      {t(lang, "contactTitle")}
+    </h2>
+
+    <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+      <!-- Google Maps (left column) -->
+      <div class="relative">
+        <div class="relative w-full h-96 lg:h-full min-h-[400px] rounded-none overflow-hidden shadow-2xl cursor-pointer">
+          <iframe
+            src={mapsEmbedUrl}
+            class="absolute inset-0 w-full h-full pointer-events-none"
+            style="border:0"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title={iframeTitle}
+          />
+          <button
+            type="button"
+            id="map-overlay"
+            data-maps-url={mapsOpenUrl}
+            aria-label={t(lang, "openMapsLabel")}
+            class="absolute inset-0 w-full h-full bg-transparent cursor-pointer"
+          />
+        </div>
+        <!-- Instruction text — visible on mobile -->
+        <div class="mt-4 lg:hidden">
+          <p class="text-gray-400 font-space-mono-regular text-sm text-center">
+            {t(lang, "mapInstruction")}
+          </p>
+        </div>
+      </div>
+
+      <!-- Contact info (right column) -->
+      <div class="space-y-8">
+        <div>
+          <h3 class="text-2xl font-space-mono-bold text-[#ff8d2f] mb-3">{t(lang, "addressTitle")}</h3>
+          <p class="text-lg text-gray-300 whitespace-pre-line font-space-mono-regular">
+            {t(lang, "address")}
+          </p>
+        </div>
+        <div>
+          <h3 class="text-2xl font-space-mono-bold text-[#ff8d2f] mb-3">{t(lang, "phoneTitle")}</h3>
+          <a
+            href="tel:+48722720000"
+            class="text-lg text-gray-300 font-space-mono-regular hover:text-[#ff8d2f] transition-colors duration-200"
+          >
+            {t(lang, "phone")}
+          </a>
+        </div>
+        <div>
+          <h3 class="text-2xl font-space-mono-bold text-[#ff8d2f] mb-3">{t(lang, "hoursTitle")}</h3>
+          <p class="text-lg text-gray-300 whitespace-pre-line font-space-mono-regular">
+            {t(lang, "hours")}
+          </p>
+        </div>
+        <!-- Instruction text — visible on desktop -->
+        <div class="pt-6 border-t border-gray-700 hidden lg:block">
+          <p class="text-gray-400 font-space-mono-regular text-sm">{t(lang, "mapInstruction")}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Transparent overlay button over the (non-interactive) map iframe opens the
+  // place in Google Maps in a new tab.
+  const overlay = document.getElementById("map-overlay");
+  overlay?.addEventListener("click", () => {
+    const url = overlay.getAttribute("data-maps-url") ?? "";
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
+  });
+</script>

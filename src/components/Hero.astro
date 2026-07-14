@@ -1,0 +1,105 @@
+---
+import type { Lang } from "@/i18n/config";
+import { t } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// Two slideshow backgrounds, AVIF -> WebP via <picture> with a responsive srcset.
+const slides = [
+  { base: "/hero/bg1", fallback: "/hero/bg1-1920.webp" },
+  { base: "/hero/bg2", fallback: "/hero/bg2-1920.webp" },
+];
+const widths = [640, 1024, 1536, 1920];
+const srcset = (base: string, ext: string) =>
+  widths.map((w) => `${base}-${w}.${ext} ${w}w`).join(", ");
+---
+
+<section
+  class="relative min-h-screen flex items-center justify-center overflow-hidden"
+>
+  {
+    slides.map((slide, index) => (
+      <div
+        class:list={[
+          "absolute inset-0 transition-opacity duration-1000",
+          index === 0 ? "opacity-100" : "opacity-0",
+        ]}
+        data-hero-slide
+      >
+        <picture>
+          <source type="image/avif" srcset={srcset(slide.base, "avif")} sizes="100vw" />
+          <source type="image/webp" srcset={srcset(slide.base, "webp")} sizes="100vw" />
+          <img
+            src={slide.fallback}
+            alt=""
+            class="w-full h-full object-cover transition-transform duration-[6000ms] ease-out scale-100"
+            fetchpriority={index === 0 ? "high" : "low"}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+          />
+        </picture>
+      </div>
+    ))
+  }
+
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-black/60 z-10"></div>
+
+  <!-- Content -->
+  <div class="relative z-20 text-center px-4 max-w-7xl mx-auto mt-24">
+    <!-- Semantic H1 for SEO (visually hidden — the logo image shows the brand) -->
+    <h1 class="sr-only">{t(lang, "seoH1")}</h1>
+    <div class="mb-6">
+      <picture>
+        <source type="image/avif" srcset="/logo-hero.avif" />
+        <source type="image/webp" srcset="/logo-hero.webp" />
+        <img
+          src="/logo-hero.webp"
+          alt="ProstoKątna — pizzeria Tarnowskie Góry"
+          width="1680"
+          height="329"
+          fetchpriority="high"
+          class="mx-auto w-full max-w-4xl h-auto"
+        />
+      </picture>
+    </div>
+
+    <p class="text-2xl md:text-4xl text-white/90 max-w-none mx-auto leading-relaxed font-space-mono">
+      {t(lang, "heroSubtitle")}
+    </p>
+    <p class="text-2xl md:text-4xl text-white/90 max-w-none w-full leading-relaxed font-space-mono">
+      {t(lang, "heroSubtitle2")}
+    </p>
+  </div>
+</section>
+
+<script>
+  // Auto-advance the slideshow every 5s with a 1s opacity crossfade, plus a
+  // one-shot 6s Ken Burns zoom (scale-100 -> scale-110) on the active slide.
+  // Skipped entirely under prefers-reduced-motion (static first slide).
+  const prefersReduced = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const slides = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-hero-slide]"),
+  );
+  const imgs = slides.map((s) => s.querySelector("img"));
+
+  if (slides.length > 1 && !prefersReduced) {
+    let i = 0;
+    // Entrance zoom on the first slide.
+    requestAnimationFrame(() =>
+      imgs[i]?.classList.replace("scale-100", "scale-110"),
+    );
+    setInterval(() => {
+      slides[i].classList.replace("opacity-100", "opacity-0");
+      imgs[i]?.classList.replace("scale-110", "scale-100");
+      i = (i + 1) % slides.length;
+      slides[i].classList.replace("opacity-0", "opacity-100");
+      imgs[i]?.classList.replace("scale-100", "scale-110");
+    }, 5000);
+  }
+</script>

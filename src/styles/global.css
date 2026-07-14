@@ -122,18 +122,3 @@
     }
   }
 }
-
-/* Ken Burns zoom for the hero slideshow images (independent of the
-   opacity crossfade, so it needs no JS coordination). */
-@keyframes kenburns {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.1);
-  }
-}
-.hero-kenburns {
-  animation: kenburns 6s ease-in-out infinite alternate;
-  will-change: transform;
-}
