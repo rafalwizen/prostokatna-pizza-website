@@ -7,13 +7,9 @@ export const translations = {
   pl: {
     seoH1: "ProstoKątna — pizzeria w Tarnowskich Górach, pizza z dostawą i na wynos",
     navMenu: "Menu",
-    navAbout: "O nas",
     navContact: "Kontakt",
     heroSubtitle: "Pizza z sercem i wspomnieniami",
     heroSubtitle2: "Nieokrągła. Nieprzypadkowa",
-    aboutTitle: "Nasza Historia",
-    aboutText:
-      "Od ponad 20 lat serwujemy najlepszą pizzę w Tarnowskich Górach. Nasze ciasto przygotowujemy codziennie rano z najwyższej jakości mąki, a składniki pochodzą od lokalnych dostawców ze Śląska. Każda pizza — na miejscu, na wynos lub z dostawą — powstaje z pasją i miłością do włoskiej kuchni.",
     contactTitle: "Znajdziesz nas tutaj",
     addressTitle: "Adres",
     address: "ul. Zamkowa 6\n42-600 Tarnowskie Góry",
@@ -33,13 +29,9 @@ export const translations = {
   en: {
     seoH1: "ProstoKątna — pizzeria in Tarnowskie Góry, pizza delivery and takeaway",
     navMenu: "Menu",
-    navAbout: "About Us",
     navContact: "Contact",
     heroSubtitle: "Pizza with heart and memories",
     heroSubtitle2: "Not round. Not accidental",
-    aboutTitle: "Our Story",
-    aboutText:
-      "For over 20 years we've been serving the best pizza in Tarnowskie Góry. We prepare our dough fresh every morning using top-quality flour, and our ingredients come from local Silesian suppliers. Every pizza — dine-in, takeaway or delivery — is made with passion and love for Italian cuisine.",
     contactTitle: "You'll find us here",
     addressTitle: "Address",
     address: "ul. Zamkowa 6\n42-600 Tarnowskie Góry",
