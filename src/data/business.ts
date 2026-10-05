@@ -3,12 +3,16 @@
 // the Contact and Order sections, and the sitemap (via SITE_URL).
 import { SITE_URL } from "@/i18n/config";
 import type { Lang } from "@/i18n/config";
+import { t, faqKeys } from "@/i18n/ui";
+import { menuSections, pizzaSizes } from "@/data/menu";
 
 export const business = {
   name: "ProstoKątna",
   alternateName: "Slice Pizza TG",
   description:
     "Pizzeria ProstoKątna w Tarnowskich Górach — autentyczne włoskie smaki, pizza robiona z sercem. ul. Zamkowa 6. Zamów z dostawą lub na wynos: 722 720 000.",
+  descriptionEn:
+    "ProstoKątna pizzeria in Tarnowskie Góry — authentic Italian flavors, pizza made with heart. ul. Zamkowa 6. Order delivery or takeaway: +48 722 720 000.",
   telephone: "+48722720000",
   telephoneDisplay: "722 720 000",
   image: `${SITE_URL}/logo-opengraph-v2.png`,
@@ -56,9 +60,56 @@ export const delivery = [
 
 export const sameAs = [business.mapsUrl, ...delivery.map((d) => d.url)];
 
-// schema.org @graph: Restaurant (+FoodEstablishment), WebSite, WebPage.
-// Only `inLanguage` flips per language. aggregateRating is intentionally
-// omitted until the owner supplies a rating + review count.
+// schema.org Menu node generated from the menu data (src/data/menu.ts) so the
+// visible menu and the structured data stay in sync.
+function buildMenuSchema(lang: Lang) {
+  return {
+    "@type": "Menu",
+    name: `Menu — ${business.name}`,
+    inLanguage: lang === "pl" ? "pl-PL" : "en-US",
+    hasMenuSection: menuSections.map((section) => ({
+      "@type": "MenuSection",
+      name: section.title[lang],
+      hasMenuItem: section.items.map((item) => ({
+        "@type": "MenuItem",
+        name: lang === "en" && item.nameEn ? item.nameEn : item.name,
+        ...(item.description[lang] ? { description: item.description[lang] } : {}),
+        ...(item.vegetarian
+          ? { suitableForDiet: "https://schema.org/VegetarianDiet" }
+          : {}),
+        offers: item.free
+          ? [{ "@type": "Offer", price: "0", priceCurrency: "PLN" }]
+          : item.price !== undefined
+            ? [
+                {
+                  "@type": "Offer",
+                  price: String(item.price),
+                  priceCurrency: "PLN",
+                },
+              ]
+            : [
+                {
+                  "@type": "Offer",
+                  name: pizzaSizes.small,
+                  price: String(item.priceSmall),
+                  priceCurrency: "PLN",
+                },
+                {
+                  "@type": "Offer",
+                  name: pizzaSizes.large,
+                  price: String(item.priceLarge),
+                  priceCurrency: "PLN",
+                },
+              ],
+      })),
+    })),
+  };
+}
+
+// schema.org @graph: Restaurant (+FoodEstablishment) with Menu, WebSite,
+// WebPage and FAQPage. Copy flips per language (PL is the default).
+// aggregateRating is intentionally omitted until the owner supplies a
+// rating + review count.
 export function buildJsonLd(lang: Lang) {
   const inLanguage = lang === "pl" ? "pl-PL" : "en-US";
   const pageSlug = lang === "pl" ? "" : "en/";
@@ -71,7 +122,7 @@ export function buildJsonLd(lang: Lang) {
         "@id": `${SITE_URL}/#restaurant`,
         name: business.name,
         alternateName: business.alternateName,
-        description: business.description,
+        description: lang === "en" ? business.descriptionEn : business.description,
         url: SITE_URL,
         telephone: business.telephone,
         image: business.image,
@@ -83,8 +134,13 @@ export function buildJsonLd(lang: Lang) {
           "@type": "PostalAddress",
           streetAddress: business.address.streetAddress,
           addressLocality: business.address.addressLocality,
+          addressRegion: "SL",
           postalCode: business.address.postalCode,
           addressCountry: business.address.addressCountry,
+        },
+        areaServed: {
+          "@type": "City",
+          name: "Tarnowskie Góry",
         },
         geo: {
           "@type": "GeoCoordinates",
@@ -119,7 +175,9 @@ export function buildJsonLd(lang: Lang) {
           },
         ],
         menu: `${SITE_URL}/#menu`,
-        acceptsReservations: false,
+        hasMenu: buildMenuSchema(lang),
+        // The venue has dine-in tables (orders are placed at the bar).
+        acceptsReservations: true,
         sameAs,
         potentialAction: delivery.map((d) => ({
           "@type": "OrderAction",
@@ -142,6 +200,18 @@ export function buildJsonLd(lang: Lang) {
         inLanguage,
         isPartOf: { "@id": `${SITE_URL}/#website` },
         about: { "@id": `${SITE_URL}/#restaurant` },
+      },
+      {
+        // Mirrors the visible FAQ section (strings come straight from ui.ts).
+        "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
+        inLanguage,
+        isPartOf: { "@id": `${SITE_URL}/${pageSlug}#webpage` },
+        mainEntity: faqKeys.map(([qKey, aKey]) => ({
+          "@type": "Question",
+          name: t(lang, qKey),
+          acceptedAnswer: { "@type": "Answer", text: t(lang, aKey) },
+        })),
       },
     ],
   };

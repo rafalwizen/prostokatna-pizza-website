@@ -21,6 +21,7 @@ const seoByLang: Record<Lang, {
   description: string;
   keywords: string;
   ogLocale: string;
+  ogImageAlt: string;
 }> = {
   pl: {
     title: "Pizza Tarnowskie Góry | ProstoKątna — pizzeria, dostawa",
@@ -29,15 +30,18 @@ const seoByLang: Record<Lang, {
     keywords:
       "pizza Tarnowskie Góry, pizzeria Tarnowskie Góry, dostawa pizzy Tarnowskie Góry, pizza na wynos Tarnowskie Góry, włoska kuchnia, ProstoKątna, ul. Zamkowa 6, Slice Pizza TG",
     ogLocale: "pl_PL",
+    ogImageAlt:
+      "ProstoKątna — pizzeria, pizza Tarnowskie Góry, dostawa i na wynos",
   },
   en: {
     title: "Pizza Tarnowskie Góry | ProstoKątna — pizzeria, delivery",
     ogTitle: "ProstoKątna — pizza Tarnowskie Góry | pizzeria, delivery",
-    description:
-      "ProstoKątna pizzeria in Tarnowskie Góry — authentic Italian flavors, pizza made with heart. ul. Zamkowa 6. Order delivery or takeaway: +48 722 720 000.",
+    description: business.descriptionEn,
     keywords:
       "pizza Tarnowskie Góry, pizzeria Tarnowskie Góry, pizza delivery Tarnowskie Góry, pizza takeaway Tarnowskie Góry, Italian cuisine, ProstoKątna, Slice Pizza TG",
     ogLocale: "en_US",
+    ogImageAlt:
+      "ProstoKątna — pizzeria, pizza in Tarnowskie Góry, delivery and takeaway",
   },
 };
 
@@ -72,8 +76,12 @@ const jsonLd = buildJsonLd(lang);
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={business.name} />
+    <meta property="og:image:alt" content={seo.ogImageAlt} />
     <meta property="og:locale" content={seo.ogLocale} />
+    <meta
+      property="og:locale:alternate"
+      content={lang === "pl" ? "en_US" : "pl_PL"}
+    />
     <meta property="og:site_name" content={business.name} />
 
     <!-- Twitter -->
