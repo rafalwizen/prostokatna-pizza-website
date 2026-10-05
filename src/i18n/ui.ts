@@ -21,10 +21,6 @@ export const translations = {
     mapInstruction: "Kliknij mapę, aby przejść do Google Maps",
     openMapsLabel: "Otwórz w Google Maps",
     orderTitle: "Zamów online",
-    menuImage1Alt: "Menu pizzerii ProstoKątna w Tarnowskich Górach — strona 1",
-    menuImage2Alt: "Menu pizzerii ProstoKątna w Tarnowskich Górach — strona 2",
-    openImage: "Powiększ zdjęcie menu",
-    closeImage: "Zamknij",
     menuTitle: "Menu",
     menuBarNote: "Zamówienia składamy przy barze",
     menuLegend:
@@ -35,8 +31,6 @@ export const translations = {
     priceSmallLabel: "mała",
     priceLargeLabel: "duża",
     freeLabel: "GRATIS",
-    menuPhoto1Link: "Zobacz oryginalną kartę menu — zdjęcie 1",
-    menuPhoto2Link: "Zobacz oryginalną kartę menu — zdjęcie 2",
     introTitle: "Prostokątna pizza w Tarnowskich Górach",
     introText:
       "ProstoKątna to pizzeria przy ul. Zamkowej 6 w Tarnowskich Górach. Serwujemy prostokątną pizzę w dwóch rozmiarach — małą 24×18 cm i dużą 40×22 cm — na cienkim cieście, z włoskimi składnikami: nduią, szynką parmeńską, pistacjami i gorgonzolą. Zjesz u nas na miejscu (zamówienia składamy przy barze), zabierzesz na wynos albo zamówisz z dostawą w Tarnowskich Górach przez Pyszne.pl, Glovo i Uber Eats. Nieokrągła. Nieprzypadkowa.",
@@ -77,10 +71,6 @@ export const translations = {
     mapInstruction: "Click the map to go to Google Maps",
     openMapsLabel: "Open in Google Maps",
     orderTitle: "Order online",
-    menuImage1Alt: "Menu of ProstoKątna pizzeria in Tarnowskie Góry — page 1",
-    menuImage2Alt: "Menu of ProstoKątna pizzeria in Tarnowskie Góry — page 2",
-    openImage: "Open menu image",
-    closeImage: "Close",
     menuTitle: "Menu",
     menuBarNote: "Orders are placed at the bar",
     menuLegend:
@@ -91,8 +81,6 @@ export const translations = {
     priceSmallLabel: "small",
     priceLargeLabel: "large",
     freeLabel: "FREE",
-    menuPhoto1Link: "See the original menu card — photo 1",
-    menuPhoto2Link: "See the original menu card — photo 2",
     introTitle: "Rectangular pizza in Tarnowskie Góry",
     introText:
       "ProstoKątna is a pizzeria at 6 Zamkowa Street in Tarnowskie Góry, Poland. We bake rectangular pizza in two sizes — small 24×18 cm and large 40×22 cm — with Italian toppings: 'nduja, Parma ham, pistachios and gorgonzola. Eat in (orders are placed at the bar), take away, or order pizza delivery in Tarnowskie Góry via Pyszne.pl, Glovo and Uber Eats. Not round. Not accidental.",

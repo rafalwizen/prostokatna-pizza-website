@@ -1,7 +1,6 @@
 // Single source of truth for the menu content. Rendered by Menu.astro and
 // converted to schema.org Menu JSON-LD by buildMenuSchema() in business.ts.
-// Transcribed from the printed menu photos (public/menu1.webp, menu2.webp) —
-// the photos stay available in the menu section as "original card" links.
+// Transcribed from the original printed-menu photos (kept in git history).
 // NOTE TO THE OWNER: every name, ingredient and price below must be proofread
 // against the printed card before going live.
 

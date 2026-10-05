@@ -42,15 +42,37 @@
 }
 
 /* Checkerboard frame for the menu cards (orange/cream chessboard border,
-   mirrors the printed menu card). */
+   mirrors the printed menu card). Sub-squares are 10px; `round` rescales the
+   tiling so whole squares meet every edge — no cut checkers on any side. */
 @utility menu-checker {
   background-image: repeating-conic-gradient(#ff8d2f 0% 25%, #f6edda 0% 50%);
   background-size: 20px 20px;
+  background-repeat: round;
+}
+
+/* Brand wordmark as a CSS mask stencilled in currentColor: the shape comes
+   from the hero logo file, the color always matches the card's ink (cream on
+   the pizza card, orange on the drinks card), like the printed menu. */
+@utility menu-logo {
+  display: block;
+  aspect-ratio: 1680 / 329;
+  background-color: currentColor;
+  -webkit-mask-image: url("/logo-hero.webp");
+  mask-image: url("/logo-hero.webp");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Offset anchor jumps so sections land below the fixed header
+       (py-4 + h-20 logo + border = ~113px). */
+    scroll-padding-top: 7.5rem;
   }
 
   body {

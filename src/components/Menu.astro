@@ -1,6 +1,7 @@
 ---
 import type { Lang } from "@/i18n/config";
 import { t } from "@/i18n/ui";
+import { business } from "@/data/business";
 import {
   menuFootnotes,
   menuSections,
@@ -14,25 +15,8 @@ interface Props {
 const { lang } = Astro.props;
 
 // Text menu rendered to look like the printed cards (orange = pizza,
-// cream = drinks, checkerboard frame, dotted price leaders). The photos of
-// the printed card stay below as lightbox thumbnails.
+// cream = drinks, checkerboard frame, dotted price leaders).
 const [pizzaSection, drinksSection] = menuSections;
-const photos = [
-  {
-    src: "/menu1.webp",
-    alt: t(lang, "menuImage1Alt"),
-    label: t(lang, "menuPhoto1Link"),
-    width: 1161,
-    height: 2000,
-  },
-  {
-    src: "/menu2.webp",
-    alt: t(lang, "menuImage2Alt"),
-    label: t(lang, "menuPhoto2Link"),
-    width: 1200,
-    height: 1702,
-  },
-];
 
 // Right-aligned price cell text ("16/31 PLN", "5 PLN", "GRATIS").
 function priceText(item: MenuItem): string {
@@ -68,7 +52,7 @@ function priceAria(item: MenuItem): string | undefined {
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
       {
         [pizzaSection, drinksSection].map((section) => (
-          <div class="menu-checker p-2.5 shadow-2xl">
+          <div class="menu-checker p-5 shadow-2xl">
             <div
               class:list={[
                 "p-6 md:p-8 min-h-full",
@@ -77,21 +61,24 @@ function priceAria(item: MenuItem): string | undefined {
                   : "bg-[#f6edda] text-[#ff8d2f]",
               ]}
             >
-              {/* Wordmark mirroring the printed card header */}
-              <p class="text-center">
-                <span class="text-4xl md:text-5xl">Prostokątna</span>
-                <span class="block font-space-mono-bold uppercase tracking-[0.5em] text-xs mt-1">
-                  Pizza
-                </span>
-              </p>
-
-              <div class="flex justify-between gap-4 font-space-mono-regular text-xs md:text-sm mt-6">
-                <span>{t(lang, "menuBarNote")}</span>
-                <span class="whitespace-nowrap">
-                  {pizzaSizes.small.replace(" cm", "")} /{" "}
-                  {pizzaSizes.large.replace(" cm", "")} cm
-                </span>
+              {/* Brand wordmark: hero logo shape stencilled in the card ink */}
+              <div class="flex justify-center">
+                <span
+                  class="menu-logo h-10 md:h-12"
+                  role="img"
+                  aria-label={business.name}
+                />
               </div>
+
+              {section.id === "pizza" && (
+                <div class="flex justify-between gap-4 font-space-mono-regular text-xs md:text-sm mt-6">
+                  <span>{t(lang, "menuBarNote")}</span>
+                  <span class="whitespace-nowrap">
+                    {pizzaSizes.small.replace(" cm", "")} /{" "}
+                    {pizzaSizes.large.replace(" cm", "")} cm
+                  </span>
+                </div>
+              )}
 
               <h3 class="font-space-mono-bold uppercase tracking-widest text-2xl text-center mt-8 mb-6">
                 {section.title[lang]}
@@ -144,7 +131,14 @@ function priceAria(item: MenuItem): string | undefined {
                       </div>
 
                       {item.description[lang] && (
-                        <p class="font-space-mono-regular text-sm opacity-80 lowercase">
+                        <p
+                          class:list={[
+                            "font-space-mono-regular text-sm opacity-80 lowercase",
+                            // Wrap before the price column so ingredients
+                            // never run under the right-aligned prices.
+                            section.id === "pizza" ? "pr-20" : "pr-12",
+                          ]}
+                        >
                           {item.description[lang]}
                         </p>
                       )}
@@ -165,94 +159,5 @@ function priceAria(item: MenuItem): string | undefined {
         ))
       }
     </div>
-
-    <!-- Original printed-menu photos (lightbox zoom) -->
-    <div class="mt-12 flex flex-wrap justify-center gap-8">
-      {
-        photos.map((photo) => (
-          <button
-            type="button"
-            data-lightbox-trigger
-            data-full={photo.src}
-            data-alt={photo.alt}
-            aria-label={photo.label}
-            class="group flex flex-col items-center gap-2 cursor-pointer"
-          >
-            <img
-              src={photo.src}
-              alt={photo.alt}
-              loading="lazy"
-              width={photo.width}
-              height={photo.height}
-              class="h-24 md:h-28 w-auto shadow-2xl group-hover:opacity-80 transition-opacity duration-200"
-            />
-            <span class="font-space-mono-regular text-sm text-gray-400 group-hover:text-[#ff8d2f] transition-colors duration-200">
-              {photo.label}
-            </span>
-          </button>
-        ))
-      }
-    </div>
   </div>
 </section>
-
-<!-- Lightbox modal (always in the DOM, hidden by default) -->
-<div
-  id="lightbox"
-  class="hidden fixed inset-0 bg-black/90 items-center justify-center z-50 cursor-pointer"
-  role="dialog"
-  aria-modal="true"
-  data-lightbox
->
-  <img id="lightbox-img" alt="" class="max-w-full max-h-full object-contain" />
-  <button
-    type="button"
-    data-lightbox-close
-    aria-label={t(lang, "closeImage")}
-    class="absolute top-4 right-4 text-white text-3xl font-bold focus:outline-none"
-  >
-    &times;
-  </button>
-</div>
-
-<script>
-  const triggers = Array.from(
-    document.querySelectorAll<HTMLElement>("[data-lightbox-trigger]"),
-  );
-  const modal = document.getElementById("lightbox");
-  const modalImg = document.getElementById("lightbox-img");
-  const closeBtn = document.querySelector<HTMLElement>("[data-lightbox-close]");
-
-  const open = (src: string, alt: string) => {
-    if (!modal || !modalImg) return;
-    modalImg.setAttribute("src", src);
-    modalImg.setAttribute("alt", alt);
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
-    document.body.style.overflow = "hidden";
-  };
-  const close = () => {
-    if (!modal || !modalImg) return;
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-    modalImg.setAttribute("src", "");
-    modalImg.setAttribute("alt", "");
-    document.body.style.overflow = "";
-  };
-
-  triggers.forEach((el) =>
-    el.addEventListener("click", () =>
-      open(el.dataset.full ?? "", el.dataset.alt ?? ""),
-    ),
-  );
-  closeBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    close();
-  });
-  modal?.addEventListener("click", (e) => {
-    if (e.target === modal) close();
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") close();
-  });
-</script>
