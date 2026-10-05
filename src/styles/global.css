@@ -41,6 +41,13 @@
   font-style: italic;
 }
 
+/* Checkerboard frame for the menu cards (orange/cream chessboard border,
+   mirrors the printed menu card). */
+@utility menu-checker {
+  background-image: repeating-conic-gradient(#ff8d2f 0% 25%, #f6edda 0% 50%);
+  background-size: 20px 20px;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

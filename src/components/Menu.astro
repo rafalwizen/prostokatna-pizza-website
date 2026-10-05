@@ -1,64 +1,219 @@
 ---
 import type { Lang } from "@/i18n/config";
 import { t } from "@/i18n/ui";
+import {
+  menuFootnotes,
+  menuSections,
+  pizzaSizes,
+  type MenuItem,
+} from "@/data/menu";
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 
-// The "menu" is two photos of the printed menu. menu1 uses object-contain
-// (letterboxed on black), menu2 uses object-cover.
-const items = [
-  { src: "/menu1.webp", alt: t(lang, "menuImage1Alt"), fit: "object-contain bg-black" },
-  { src: "/menu2.webp", alt: t(lang, "menuImage2Alt"), fit: "object-cover" },
+// Text menu rendered to look like the printed cards (orange = pizza,
+// cream = drinks, checkerboard frame, dotted price leaders). The photos of
+// the printed card stay below as lightbox thumbnails.
+const [pizzaSection, drinksSection] = menuSections;
+const photos = [
+  {
+    src: "/menu1.webp",
+    alt: t(lang, "menuImage1Alt"),
+    label: t(lang, "menuPhoto1Link"),
+    width: 1161,
+    height: 2000,
+  },
+  {
+    src: "/menu2.webp",
+    alt: t(lang, "menuImage2Alt"),
+    label: t(lang, "menuPhoto2Link"),
+    width: 1200,
+    height: 1702,
+  },
 ];
+
+// Right-aligned price cell text ("16/31 PLN", "5 PLN", "GRATIS").
+function priceText(item: MenuItem): string {
+  if (item.free) return t(lang, "freeLabel");
+  if (item.price !== undefined) return `${item.price} PLN`;
+  return `${item.priceSmall}/${item.priceLarge} PLN`;
+}
+
+// Screen-reader wording for the ambiguous "16/31" small/large pair.
+function priceAria(item: MenuItem): string | undefined {
+  if (item.priceSmall === undefined || item.priceLarge === undefined)
+    return undefined;
+  return `${t(lang, "priceSmallLabel")} ${item.priceSmall} PLN, ${t(
+    lang,
+    "priceLargeLabel",
+  )} ${item.priceLarge} PLN`;
+}
 ---
 
 <section id="menu" class="py-20 bg-black">
   <div class="container mx-auto px-4">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <h2
+      class="text-5xl md:text-6xl font-bold font-space-mono-bold text-center text-[#ff8d2f] mb-8"
+    >
+      {t(lang, "menuTitle")}
+    </h2>
+    <p
+      class="font-space-mono-regular text-sm text-gray-400 text-center mb-16"
+    >
+      {t(lang, "menuLegend")}
+    </p>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
       {
-        items.map((it) => (
+        [pizzaSection, drinksSection].map((section) => (
+          <div class="menu-checker p-2.5 shadow-2xl">
+            <div
+              class:list={[
+                "p-6 md:p-8 min-h-full",
+                section.id === "pizza"
+                  ? "bg-[#ff8d2f] text-[#fff8ec]"
+                  : "bg-[#f6edda] text-[#ff8d2f]",
+              ]}
+            >
+              {/* Wordmark mirroring the printed card header */}
+              <p class="text-center">
+                <span class="text-4xl md:text-5xl">Prostokątna</span>
+                <span class="block font-space-mono-bold uppercase tracking-[0.5em] text-xs mt-1">
+                  Pizza
+                </span>
+              </p>
+
+              <div class="flex justify-between gap-4 font-space-mono-regular text-xs md:text-sm mt-6">
+                <span>{t(lang, "menuBarNote")}</span>
+                <span class="whitespace-nowrap">
+                  {pizzaSizes.small.replace(" cm", "")} /{" "}
+                  {pizzaSizes.large.replace(" cm", "")} cm
+                </span>
+              </div>
+
+              <h3 class="font-space-mono-bold uppercase tracking-widest text-2xl text-center mt-8 mb-6">
+                {section.title[lang]}
+              </h3>
+
+              <ul class="space-y-5">
+                {section.items.map((item) => (
+                  <li>
+                    <article>
+                      <div class="flex items-baseline gap-2">
+                        <strong class="font-space-mono-bold uppercase tracking-wide">
+                          {lang === "en" && item.nameEn ? item.nameEn : item.name}
+                        </strong>
+
+                        {item.vegetarian && (
+                          <span>
+                            <span aria-hidden="true">🌿</span>
+                            <span class="sr-only">
+                              {" "}
+                              — {t(lang, "vegetarianLabel")}
+                            </span>
+                          </span>
+                        )}
+                        {item.spicy !== undefined && (
+                          <span>
+                            <span aria-hidden="true">
+                              {"🌶️".repeat(item.spicy)}
+                            </span>
+                            <span class="sr-only"> — {t(lang, "spicyLabel")}</span>
+                          </span>
+                        )}
+                        {item.seafood && (
+                          <span>
+                            <span aria-hidden="true">🦐</span>
+                            <span class="sr-only"> — {t(lang, "seafoodLabel")}</span>
+                          </span>
+                        )}
+
+                        <span
+                          aria-hidden="true"
+                          class="flex-1 border-b-[3px] border-dotted border-current opacity-30"
+                        />
+
+                        <span
+                          class="font-space-mono-bold whitespace-nowrap"
+                          aria-label={priceAria(item)}
+                        >
+                          {priceText(item)}
+                        </span>
+                      </div>
+
+                      {item.description[lang] && (
+                        <p class="font-space-mono-regular text-sm opacity-80 lowercase">
+                          {item.description[lang]}
+                        </p>
+                      )}
+                    </article>
+                  </li>
+                ))}
+              </ul>
+
+              {section.id === "pizza" && (
+                <ul class="mt-8 space-y-1 text-right font-space-mono-regular text-sm text-[#b33429]">
+                  {menuFootnotes.map((note) => (
+                    <li>{note[lang]}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Original printed-menu photos (lightbox zoom) -->
+    <div class="mt-12 flex flex-wrap justify-center gap-8">
+      {
+        photos.map((photo) => (
           <button
             type="button"
             data-lightbox-trigger
-            data-full={it.src}
-            data-alt={it.alt}
-            aria-label={`${t(lang, "openImage")} ${it.alt}`}
-            class="relative block w-full aspect-[7/10] rounded-none overflow-hidden shadow-2xl cursor-pointer"
+            data-full={photo.src}
+            data-alt={photo.alt}
+            aria-label={photo.label}
+            class="group flex flex-col items-center gap-2 cursor-pointer"
           >
             <img
-              src={it.src}
-              alt={it.alt}
+              src={photo.src}
+              alt={photo.alt}
               loading="lazy"
-              class:list={["w-full h-full rounded-none", it.fit]}
+              width={photo.width}
+              height={photo.height}
+              class="h-24 md:h-28 w-auto shadow-2xl group-hover:opacity-80 transition-opacity duration-200"
             />
+            <span class="font-space-mono-regular text-sm text-gray-400 group-hover:text-[#ff8d2f] transition-colors duration-200">
+              {photo.label}
+            </span>
           </button>
         ))
       }
     </div>
   </div>
-
-  <!-- Lightbox modal (always in the DOM, hidden by default) -->
-  <div
-    id="lightbox"
-    class="hidden fixed inset-0 bg-black/90 items-center justify-center z-50 cursor-pointer"
-    role="dialog"
-    aria-modal="true"
-    data-lightbox
-  >
-    <img id="lightbox-img" alt="" class="max-w-full max-h-full object-contain" />
-    <button
-      type="button"
-      data-lightbox-close
-      aria-label={t(lang, "closeImage")}
-      class="absolute top-4 right-4 text-white text-3xl font-bold focus:outline-none"
-    >
-      &times;
-    </button>
-  </div>
 </section>
+
+<!-- Lightbox modal (always in the DOM, hidden by default) -->
+<div
+  id="lightbox"
+  class="hidden fixed inset-0 bg-black/90 items-center justify-center z-50 cursor-pointer"
+  role="dialog"
+  aria-modal="true"
+  data-lightbox
+>
+  <img id="lightbox-img" alt="" class="max-w-full max-h-full object-contain" />
+  <button
+    type="button"
+    data-lightbox-close
+    aria-label={t(lang, "closeImage")}
+    class="absolute top-4 right-4 text-white text-3xl font-bold focus:outline-none"
+  >
+    &times;
+  </button>
+</div>
 
 <script>
   const triggers = Array.from(
