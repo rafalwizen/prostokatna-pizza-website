@@ -1,0 +1,84 @@
+---
+import type { Lang } from "@/i18n/config";
+import { t } from "@/i18n/ui";
+import { business, delivery } from "@/data/business";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// Baked at build time — rebuild at least once a year to refresh it.
+const year = new Date().getFullYear();
+---
+
+<!-- Footer with crawlable NAP (name/address/phone), hours and delivery links,
+     kept identical to the Google Business Profile data in business.ts. -->
+<footer class="bg-black border-t border-[#ff8d2f]/20 py-12">
+  <div class="container mx-auto px-4">
+    <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+      <div>
+        <p class="text-[#ff8d2f] font-space-mono-bold mb-3">{business.name}</p>
+        <p class="text-gray-400 font-space-mono-regular text-sm leading-relaxed">
+          {t(lang, "footerTagline")}
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-[#ff8d2f] font-space-mono-bold mb-3">
+          {t(lang, "addressTitle")}
+        </h3>
+        <p
+          class="text-gray-400 font-space-mono-regular text-sm whitespace-pre-line"
+        >
+          {t(lang, "address")}
+        </p>
+        <a
+          href={`tel:${business.telephone}`}
+          class="inline-block mt-3 text-gray-400 font-space-mono-regular text-sm hover:text-[#ff8d2f] transition-colors duration-200"
+        >
+          {t(lang, "phone")}
+        </a>
+      </div>
+
+      <div>
+        <h3 class="text-[#ff8d2f] font-space-mono-bold mb-3">
+          {t(lang, "hoursTitle")}
+        </h3>
+        <p
+          class="text-gray-400 font-space-mono-regular text-sm whitespace-pre-line"
+        >
+          {t(lang, "hours")}
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-[#ff8d2f] font-space-mono-bold mb-3">
+          {t(lang, "orderTitle")}
+        </h3>
+        <ul class="space-y-2">
+          {
+            delivery.map((d) => (
+              <li>
+                <a
+                  href={d.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-gray-400 font-space-mono-regular text-sm hover:text-[#ff8d2f] transition-colors duration-200"
+                >
+                  {d.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <p
+      class="text-center text-gray-500 font-space-mono-regular text-sm mt-10"
+    >
+      © {year} · {t(lang, "footerCopyright")}
+    </p>
+  </div>
+</footer>

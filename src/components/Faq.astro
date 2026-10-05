@@ -1,0 +1,44 @@
+---
+import type { Lang } from "@/i18n/config";
+import { t, faqKeys } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<!-- FAQ with native <details> (zero JS). Mirrors the FAQPage @graph node. -->
+<section id="faq" class="py-20 bg-black">
+  <div class="container mx-auto px-4">
+    <h2
+      class="text-5xl md:text-6xl font-bold font-space-mono-bold text-center text-[#ff8d2f] mb-16"
+    >
+      {t(lang, "faqTitle")}
+    </h2>
+
+    <div class="max-w-3xl mx-auto space-y-4">
+      {
+        faqKeys.map(([qKey, aKey], index) => (
+          <details
+            open={index === 0}
+            class="group border border-[#ff8d2f]/20 bg-black"
+          >
+            <summary class="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer font-space-mono-bold text-lg text-[#ff8d2f] list-none [&::-webkit-details-marker]:hidden">
+              {t(lang, qKey)}
+              <span
+                aria-hidden="true"
+                class="text-2xl shrink-0 group-open:rotate-45 transition-transform duration-200"
+              >
+                +
+              </span>
+            </summary>
+            <p class="px-6 pb-6 text-gray-300 font-space-mono-regular leading-relaxed">
+              {t(lang, aKey)}
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
