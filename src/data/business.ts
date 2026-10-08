@@ -36,10 +36,6 @@ export const business = {
 export const mapsOpenUrl =
   "https://www.google.com/maps/place/Slice+Pizza+TG/@50.4435404,18.8549006,17z/data=!4m15!1m8!3m7!1s0x47112a2ec3746333:0x783b540fa714c3d4!2sZamkowa+6,+42-600+Tarnowskie+G%C3%B3ry!3b1!8m2!3d50.4435404!4d18.8549006!16s%2Fg%2F11c5ctkjl9!3m5!1s0x47112be1977340a9:0x84266294a4355457!8m2!3d50.4435404!4d18.8549006!16s%2Fg%2F11mdvwnw_c?entry=ttu&g_ep=EgoyMDI1MDYyMy4yIKXMDSoASAFQAw%3D%3D";
 
-// Keyless Google Maps embed (no API key) — used by the contact iframe.
-export const mapsEmbedUrl =
-  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2555.123!2d18.8549006!3d50.4435404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47112be1977340a9%3A0x84266294a4355457!2sSlice%20Pizza%20TG!5e0!3m2!1spl!2spl!4v1640000000000!5m2!1spl!2spl";
-
 export const delivery = [
   {
     name: "Pyszne.pl",
