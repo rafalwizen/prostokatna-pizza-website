@@ -32,9 +32,6 @@ export const translations = {
     priceSmallLabel: "mała",
     priceLargeLabel: "duża",
     freeLabel: "GRATIS",
-    introTitle: "Prostokątna pizza w Tarnowskich Górach",
-    introText:
-      "ProstoKątna to pizzeria przy ul. Zamkowej 6 w Tarnowskich Górach. Serwujemy prostokątną pizzę w dwóch rozmiarach — małą 24×18 cm i dużą 40×22 cm — na cienkim cieście, z włoskimi składnikami: nduią, szynką parmeńską, pistacjami i gorgonzolą. Zjesz u nas na miejscu (zamówienia składamy przy barze), zabierzesz na wynos albo zamówisz z dostawą w Tarnowskich Górach przez Pyszne.pl, Glovo i Uber Eats. Nieokrągła. Nieprzypadkowa.",
     faqTitle: "Częste pytania",
     faq1Q: "Czy dowozicie pizzę w Tarnowskich Górach?",
     faq1A:
@@ -83,9 +80,6 @@ export const translations = {
     priceSmallLabel: "small",
     priceLargeLabel: "large",
     freeLabel: "FREE",
-    introTitle: "Rectangular pizza in Tarnowskie Góry",
-    introText:
-      "ProstoKątna is a pizzeria at 6 Zamkowa Street in Tarnowskie Góry, Poland. We bake rectangular pizza in two sizes — small 24×18 cm and large 40×22 cm — with Italian toppings: 'nduja, Parma ham, pistachios and gorgonzola. Eat in (orders are placed at the bar), take away, or order pizza delivery in Tarnowskie Góry via Pyszne.pl, Glovo and Uber Eats. Not round. Not accidental.",
     faqTitle: "Frequently asked questions",
     faq1Q: "Do you deliver pizza in Tarnowskie Góry?",
     faq1A:
