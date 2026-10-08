@@ -1,17 +1,12 @@
 ---
 import type { Lang } from "@/i18n/config";
 import { t } from "@/i18n/ui";
-import { mapsEmbedUrl, mapsOpenUrl } from "@/data/business";
+import { mapsOpenUrl } from "@/data/business";
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-
-const iframeTitle =
-  lang === "pl"
-    ? "Lokalizacja restauracji ProstoKątna"
-    : "Location of ProstoKątna restaurant";
 ---
 
 <section id="contact" class="py-20 bg-black">
@@ -21,16 +16,17 @@ const iframeTitle =
     </h2>
 
     <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-      <!-- Google Maps (left column) -->
+      <!-- Static map (left column) — self-hosted image, no third-party requests -->
       <div class="relative">
         <div class="relative w-full h-96 lg:h-full min-h-[400px] rounded-none overflow-hidden shadow-2xl cursor-pointer">
-          <iframe
-            src={mapsEmbedUrl}
-            class="absolute inset-0 w-full h-full pointer-events-none"
-            style="border:0"
+          <img
+            src="/map-tarnowskie-gory.webp"
+            alt={t(lang, "mapAlt")}
+            width={660}
+            height={600}
+            class="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title={iframeTitle}
+            decoding="async"
           />
           <button
             type="button"
@@ -81,8 +77,8 @@ const iframeTitle =
 </section>
 
 <script>
-  // Transparent overlay button over the (non-interactive) map iframe opens the
-  // place in Google Maps in a new tab.
+  // Transparent overlay button over the static map image opens the place in
+  // Google Maps in a new tab.
   const overlay = document.getElementById("map-overlay");
   overlay?.addEventListener("click", () => {
     const url = overlay.getAttribute("data-maps-url") ?? "";
