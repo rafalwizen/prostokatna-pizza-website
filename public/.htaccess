@@ -19,6 +19,9 @@ AddDefaultCharset UTF-8
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://prostokatna.pl%{REQUEST_URI} [R=301,L,NE]
+  # /sitemap.xml -> sitemap-index.xml (the sitemap integration emits the
+  # index name; crawlers guess the classic /sitemap.xml and would get a 404)
+  RewriteRule ^sitemap\.xml$ /sitemap-index.xml [R=301,L,NE]
 </IfModule>
 
 # ===== Compression (mod_deflate) =====
