@@ -12,6 +12,11 @@ AddDefaultCharset UTF-8
 # X-Forwarded-Proto guard prevents a redirect loop.
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  # /en -> /en/ as a single https hop. This must precede the scheme rules:
+  # without it mod_dir's DirectorySlash answers first and, because TLS is
+  # terminated upstream, rebuilds the absolute URL with the http scheme
+  # (https://.../en -> http://.../en/ -> https://.../en/).
+  RewriteRule ^en$ https://prostokatna.pl/en/ [R=301,L,NE]
   # www -> apex, any scheme
   RewriteCond %{HTTP_HOST} ^www\.prostokatna\.pl$ [NC]
   RewriteRule ^ https://prostokatna.pl%{REQUEST_URI} [R=301,L,NE]
@@ -20,8 +25,10 @@ AddDefaultCharset UTF-8
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://prostokatna.pl%{REQUEST_URI} [R=301,L,NE]
   # /sitemap.xml -> sitemap-index.xml (the sitemap integration emits the
-  # index name; crawlers guess the classic /sitemap.xml and would get a 404)
-  RewriteRule ^sitemap\.xml$ /sitemap-index.xml [R=301,L,NE]
+  # index name; crawlers guess the classic /sitemap.xml and would get a 404).
+  # Absolute https target: a root-relative one would make Apache prepend the
+  # http scheme it sees behind the TLS-terminating proxy.
+  RewriteRule ^sitemap\.xml$ https://prostokatna.pl/sitemap-index.xml [R=301,L,NE]
 </IfModule>
 
 # ===== Compression (mod_deflate) =====
