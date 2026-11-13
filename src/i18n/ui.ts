@@ -38,8 +38,8 @@ export const translations = {
       "Tak. Pizzę z ProstoKątnej dowozimy w Tarnowskich Górach przez Pyszne.pl, Glovo i Uber Eats — wybierz aplikację w sekcji „Zamów online”.",
     faq2Q: "Gdzie jesteście i czy można zjeść na miejscu?",
     faq2A:
-      "Znajdziesz nas przy ul. Zamkowej 6 w Tarnowskich Górach. Zapraszamy na miejscu — zamówienia składamy przy barze, a pizzę wypiekamy po zamówieniu.",
-    faq3Q: "W jakich godzinach działa pizzeria?",
+      "Naszą pizzerię znajdziesz przy ul. Zamkowej 6 w Tarnowskich Górach. Zapraszamy na miejscu — zamówienia składamy przy barze, a pizzę wypiekamy po zamówieniu.",
+    faq3Q: "W jakich godzinach działa pizzeria w Tarnowskich Górach?",
     faq3A:
       "Śr–czw 11:00–21:00, pt 11:00–22:00, sob 12:00–21:00, nie 13:00–21:00. W poniedziałki i wtorki jesteśmy zamknięci.",
     faq4Q: "Jakie rozmiary pizzy serwujecie?",
@@ -86,8 +86,8 @@ export const translations = {
       "Yes. We deliver in Tarnowskie Góry via Pyszne.pl, Glovo and Uber Eats — pick an app in the “Order online” section.",
     faq2Q: "Where are you located and can I dine in?",
     faq2A:
-      "We are at 6 Zamkowa Street in Tarnowskie Góry. You are welcome to dine in — orders are placed at the bar and pizzas are baked to order.",
-    faq3Q: "What are your opening hours?",
+      "Our pizzeria is at 6 Zamkowa Street in Tarnowskie Góry. You are welcome to dine in — orders are placed at the bar and pizzas are baked to order.",
+    faq3Q: "What are the opening hours of your pizzeria in Tarnowskie Góry?",
     faq3A:
       "Wed–Thu 11:00–21:00, Fri 11:00–22:00, Sat 12:00–21:00, Sun 13:00–21:00. Closed Monday and Tuesday.",
     faq4Q: "What pizza sizes do you serve?",

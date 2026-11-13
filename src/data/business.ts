@@ -102,7 +102,7 @@ function buildMenuSchema(lang: Lang) {
   };
 }
 
-// schema.org @graph: Restaurant (+FoodEstablishment) with Menu, WebSite,
+// schema.org @graph: Restaurant (+FoodEstablishment, PizzaPlace) with Menu, WebSite,
 // WebPage and FAQPage. Copy flips per language (PL is the default).
 // aggregateRating is intentionally omitted until the owner supplies a
 // rating + review count.
@@ -114,7 +114,7 @@ export function buildJsonLd(lang: Lang) {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": ["FoodEstablishment", "Restaurant"],
+        "@type": ["FoodEstablishment", "Restaurant", "PizzaPlace"],
         "@id": `${SITE_URL}/#restaurant`,
         name: business.name,
         alternateName: business.alternateName,
